@@ -1,109 +1,60 @@
-/*
-BLOCKCHAIN TECHNOLOGY LAB - COPY-PASTE CODE FILE
-Based on your uploaded PDFs.
+# Practical-1: MetaMask Installation and Ether Spending Study
 
-IMPORTANT:
-- Assignment 1: MetaMask installation practical; no program code.
-- Assignment 2: MetaMask wallet creation practical; no program code.
-- Assignment 3: BankAccount.sol
-- Assignment 4: StudentData.sol
-- Assignment 5: Survey report; no program code.
+## Step 1: Install MetaMask
 
-Solidity contracts must be saved in separate .sol files to compile independently.
-This combined .txt file keeps both contracts in one place for copying.
-*/
+### For Desktop (Browser)
 
+1. Open your preferred browser (Chrome, Firefox, Edge, or Brave).
+2. Go to the official MetaMask website: [https://metamask.io](https://metamask.io)
+3. Click **"Download"** and select your browser.
+4. Add the extension to your browser.
+5. Open MetaMask, and follow the setup:
+   - **Create a new wallet** or **import an existing one**.
+   - Set a **strong password**.
+   - **Backup your secret recovery phrase** securely.
 
-// ============================================================
-// ASSIGNMENT 3: BankAccount.sol
-// ============================================================
+### For Mobile
 
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+1. Go to your App Store (iOS) or Google Play Store (Android).
+2. Search for **MetaMask**.
+3. Download and install the app.
+4. Follow similar setup steps (create wallet, backup phrase).
 
-contract BankAccount {
-    mapping(address => uint256) private balances;
+## Step 2: Connect MetaMask to a Network
 
-    function deposit() public payable {
-        require(msg.value > 0, "Deposit amount must be greater than zero");
-        balances[msg.sender] += msg.value;
-    }
+- By default, MetaMask uses the **Ethereum Mainnet**.
+- To use test networks for learning, click the network dropdown and select a testnet like **Goerli Test Network**.
+- Obtain free test Ether from a Goerli faucet: [https://goerlifaucet.com/](https://goerlifaucet.com/).
 
-    function withdraw(uint256 _amount) public {
-        require(_amount <= balances[msg.sender], "Insufficient balance");
-        balances[msg.sender] -= _amount;
-        payable(msg.sender).transfer(_amount);
-    }
+## Step 3: Understanding Ether Spending per Transaction
 
-    function getBalance() public view returns (uint256) {
-        return balances[msg.sender];
-    }
-}
+### Key Concepts
+1. **Gas Limit:** Maximum units of gas you are willing to spend.
+2. **Gas Price:** Price per gas unit in **Gwei** (1 ETH = 1,000,000,000 Gwei).
+3. **Transaction Fee = Gas Limit × Gas Price**
 
+## Step 4: Make a Test Transaction
 
-/*
-TO COMPILE:
-Copy only the Assignment 3 section above into BankAccount.sol.
-Do not include the Assignment 4 contract in the same Solidity file,
-because each contract section has its own SPDX/pragma header and you
-may prefer to compile and deploy each assignment separately.
-*/
+1. Ensure your wallet has ETH (test ETH on testnets).
+2. Click **Send** in MetaMask.
+3. Enter the recipient address and amount.
+4. Adjust **Gas Fee** if desired.
+5. Confirm the transaction.
 
+## Step 5: Observe Spending
 
-// ============================================================
-// ASSIGNMENT 4: StudentData.sol
-// ============================================================
+- After sending, MetaMask displays the **Transaction Fee** in ETH.
+- To see detailed info, check **Etherscan**:
+  1. Copy the transaction hash from MetaMask.
+  2. Go to [https://etherscan.io](https://etherscan.io) or testnet explorer like [https://goerli.etherscan.io](https://goerli.etherscan.io).
+  3. Paste the hash to see gas used and ETH spent.
 
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+## Step 6: Experiment
 
-contract StudentData {
-    struct Student {
-        string name;
-        uint256 rollNumber;
-        uint256 age;
-    }
+- Send multiple transactions with different **gas prices**.
+- Observe how fees change based on **network congestion**.
+- Try interacting with **smart contracts** to see higher gas usage.
 
-    Student[] public students;
-
-    event StudentAdded(string name, uint256 rollNumber, uint256 age);
-    event FallbackCalled(address sender, uint256 value);
-
-    function addStudent(
-        string memory _name,
-        uint256 _rollNumber,
-        uint256 _age
-    ) public {
-        students.push(Student(_name, _rollNumber, _age));
-        emit StudentAdded(_name, _rollNumber, _age);
-    }
-
-    function getStudent(uint256 _index)
-        public
-        view
-        returns (string memory, uint256, uint256)
-    {
-        require(_index < students.length, "Index out of bounds");
-        Student memory student = students[_index];
-        return (student.name, student.rollNumber, student.age);
-    }
-
-    fallback() external payable {
-        emit FallbackCalled(msg.sender, msg.value);
-    }
-
-    receive() external payable {
-        emit FallbackCalled(msg.sender, msg.value);
-    }
-
-    function getContractBalance() public view returns (uint256) {
-        return address(this).balance;
-    }
-}
-
-
-/*
-TO COMPILE:
-Copy only the Assignment 4 section above into StudentData.sol.
-Assignments 1, 2, and 5 have no Solidity code in your uploaded PDFs.
-*/
+## Tips
+- Always use a testnet first to avoid losing real ETH.
+- MetaMask provides detailed transaction history and gas usage.
